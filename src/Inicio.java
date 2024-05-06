@@ -10,6 +10,7 @@ public class Inicio extends javax.swing.JFrame {
     public Inicio(int ID, String Usuario, int idEmpleado) {
         initComponents();
         this.id = ID;
+        this.setLocationRelativeTo(null);
       Lbmosrtrar.setText( Usuario);
         this.idemple=idEmpleado;
         this.usuario = Usuario;
@@ -142,26 +143,30 @@ public class Inicio extends javax.swing.JFrame {
 
     private void btnProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductosActionPerformed
         
-        Añadir aña= new Añadir();
+        Añadir aña= new Añadir(idemple, usuario, id);
         aña.setVisible(true);
+        dispose();
     }//GEN-LAST:event_btnProductosActionPerformed
     private void btnInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventarioActionPerformed
  
-       Inventario inv = new Inventario();
+       Inventario inv = new Inventario(idemple , usuario, id);
         inv.setVisible(true);
+        dispose();
     }//GEN-LAST:event_btnInventarioActionPerformed
     private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
         
-        Reportes report = new Reportes();
+        Reportes report = new Reportes( idemple, usuario, id);
         report.setVisible(true);
+        dispose();
         
     }//GEN-LAST:event_btnReportesActionPerformed
 
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
         // TODO add your handling code here:
         
-       Ventas ven= new Ventas( idemple, usuario);
+       Ventas ven= new Ventas( idemple, usuario, id);
        ven.setVisible(true);
+       dispose();
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnCerrarsesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarsesionActionPerformed

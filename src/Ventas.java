@@ -21,12 +21,15 @@ public class Ventas extends javax.swing.JFrame {
     int cantidad;
     int idEmpleados;
     int item;
+    int idprofile;
     String usua;
 
-    public Ventas(int idEmpleado, String usuario) {
+    public Ventas(int idEmpleado, String usuario, int iD) {
         initComponents();
+        this.setLocationRelativeTo(null);
         this.idEmpleados = idEmpleado;
         this.usua = usuario;
+        this.idprofile=iD;
         listaproducto = new ArrayList();
         llenarComboProductos();
         btnVender.setVisible(false);
@@ -60,10 +63,11 @@ public class Ventas extends javax.swing.JFrame {
         tblProductos = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
+        btnDevolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(0, 51, 51));
+        jPanel1.setBackground(new java.awt.Color(0, 102, 204));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
@@ -72,7 +76,7 @@ public class Ventas extends javax.swing.JFrame {
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, -1, -1));
 
         txtnombreClie.setEditable(false);
-        txtnombreClie.setBackground(new java.awt.Color(102, 255, 204));
+        txtnombreClie.setBackground(new java.awt.Color(153, 204, 255));
         jPanel1.add(txtnombreClie, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 180, 30));
 
         jLabel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -81,7 +85,7 @@ public class Ventas extends javax.swing.JFrame {
         jLabel4.setText("Numero Identificacion");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 100, -1, -1));
 
-        txtcedula.setBackground(new java.awt.Color(0, 255, 204));
+        txtcedula.setBackground(new java.awt.Color(153, 204, 255));
         jPanel1.add(txtcedula, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 130, 180, 30));
 
         jLabel5.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
@@ -89,7 +93,7 @@ public class Ventas extends javax.swing.JFrame {
         jLabel5.setText("PRODUCTO");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 420, -1, -1));
 
-        cbProducto.setBackground(new java.awt.Color(0, 255, 204));
+        cbProducto.setBackground(new java.awt.Color(153, 204, 255));
         cbProducto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jPanel1.add(cbProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 440, 180, 30));
 
@@ -98,7 +102,7 @@ public class Ventas extends javax.swing.JFrame {
         jLabel6.setText("CANTIDAD");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 520, -1, -1));
 
-        Txtcantidad.setBackground(new java.awt.Color(0, 255, 204));
+        Txtcantidad.setBackground(new java.awt.Color(153, 204, 255));
         Txtcantidad.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 TxtcantidadKeyPressed(evt);
@@ -116,7 +120,7 @@ public class Ventas extends javax.swing.JFrame {
                 btnVenderActionPerformed(evt);
             }
         });
-        jPanel1.add(btnVender, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 520, 210, 60));
+        jPanel1.add(btnVender, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 540, 220, 70));
 
         btnBuscar.setBackground(new java.awt.Color(51, 153, 255));
         btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
@@ -130,7 +134,7 @@ public class Ventas extends javax.swing.JFrame {
         jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 180, 210, 60));
 
         txtApellido.setEditable(false);
-        txtApellido.setBackground(new java.awt.Color(51, 255, 204));
+        txtApellido.setBackground(new java.awt.Color(153, 204, 255));
         jPanel1.add(txtApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, 180, 30));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
@@ -139,7 +143,7 @@ public class Ventas extends javax.swing.JFrame {
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 200, -1, -1));
 
         txtTelefono.setEditable(false);
-        txtTelefono.setBackground(new java.awt.Color(51, 255, 204));
+        txtTelefono.setBackground(new java.awt.Color(153, 204, 255));
         txtTelefono.setForeground(new java.awt.Color(0, 0, 0));
         jPanel1.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, 180, 30));
 
@@ -172,6 +176,17 @@ public class Ventas extends javax.swing.JFrame {
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/logo ferreteria.jpeg"))); // NOI18N
         jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 160, -1));
+
+        btnDevolver.setBackground(new java.awt.Color(153, 255, 204));
+        btnDevolver.setForeground(new java.awt.Color(0, 0, 0));
+        btnDevolver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Devolver.png"))); // NOI18N
+        btnDevolver.setText("DEVOLVER");
+        btnDevolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDevolverActionPerformed(evt);
+            }
+        });
+        jPanel3.add(btnDevolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, 130, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -310,6 +325,12 @@ public class Ventas extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_TxtcantidadKeyPressed
 
+    private void btnDevolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDevolverActionPerformed
+     Inicio ini = new Inicio(idEmpleados,usua, idprofile);
+        ini.setVisible(true);
+          dispose();
+    }//GEN-LAST:event_btnDevolverActionPerformed
+
     public void vender(String producto, int cantidad) {
         Conexiones con = new Conexiones();
         nombreCliente = txtnombreClie.getText();
@@ -409,6 +430,7 @@ public class Ventas extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Txtcantidad;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnDevolver;
     private javax.swing.JButton btnVender;
     private javax.swing.JComboBox<String> cbProducto;
     private javax.swing.JLabel jLabel1;

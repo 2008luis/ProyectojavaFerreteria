@@ -22,7 +22,7 @@ public class RegistroCliente extends javax.swing.JFrame {
     String apellido, nombre,telefono,cedula;
     public RegistroCliente() {
         initComponents();
-       
+          this.setLocationRelativeTo(null);
     }
 
     /**

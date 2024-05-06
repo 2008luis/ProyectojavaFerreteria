@@ -17,12 +17,19 @@ public class Añadir extends javax.swing.JFrame {
     String nombre, categoria;
     int codigo,cantidad;
     double precio, precioVenta;
-    
-    public Añadir() {
+    int emplea,ides;
+    String usar;
+    public Añadir(int idempleados, String usuarios, int id) {
         initComponents();
+        this.emplea=idempleados;
+        this.usar=usuarios;
+        this.ides=id;
      Conexiones con = new Conexiones();
      mostrarDatos();
         
+    }
+
+    private Añadir() {
     }
 
    
@@ -50,6 +57,7 @@ public class Añadir extends javax.swing.JFrame {
         btnEliminar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
+        btnDevolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -178,6 +186,16 @@ public class Añadir extends javax.swing.JFrame {
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/logo ferreteria.jpeg"))); // NOI18N
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 150, 150));
 
+        btnDevolver.setBackground(new java.awt.Color(51, 51, 255));
+        btnDevolver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Devolver.png"))); // NOI18N
+        btnDevolver.setText("DEVOLVER");
+        btnDevolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDevolverActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnDevolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, 190, 50));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -192,8 +210,8 @@ public class Añadir extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 610, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE)
+                .addGap(0, 32, Short.MAX_VALUE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -232,6 +250,14 @@ public class Añadir extends javax.swing.JFrame {
         txtcantidadProducto.setText(String.valueOf(tablaregistroProducto.getValueAt(seleccionar, 3)));
         txtprecioProducto.setText(String.valueOf(tablaregistroProducto.getValueAt(seleccionar, 4)));
     }//GEN-LAST:event_tablaregistroProductoMouseClicked
+
+    private void btnDevolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDevolverActionPerformed
+     
+            
+     Inicio ini = new Inicio(emplea,usar,ides);
+        ini.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnDevolverActionPerformed
     
     public void guardarProductos() {
         codigo = Integer.parseInt(txtcodigoProducto.getText());
@@ -340,6 +366,7 @@ public class Añadir extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarProducto;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnDevolver;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnmodificar;
     private javax.swing.JLabel jLabel2;

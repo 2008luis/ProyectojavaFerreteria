@@ -1,14 +1,24 @@
 
+import ReportesVentanas.JIFClienteMasCompras;
 import ReportesVentanas.JIFProductoMasVendido;
 import ReportesVentanas.JIFRecaudoTotal;
 import ReportesVentanas.JIFRecuadoVendedor;
 import ReportesVentanas.JIFReporteVentasRealizadas;
 import ReportesVentanas.JIFVendedorFechas;
+import ReportesVentanas.JIFVendedorMasVentas;
 
 public class Reportes extends javax.swing.JFrame {
-
-    public Reportes() {
+int emplea,ides;
+    String usar;
+    public Reportes(int idempleados, String usuarios, int id) {
         initComponents();
+         this.emplea=idempleados;
+        this.usar=usuarios;
+        this.ides=id;
+           this.setLocationRelativeTo(null);
+    }
+
+    private Reportes() {
     }
 
     @SuppressWarnings("unchecked")
@@ -19,6 +29,7 @@ public class Reportes extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        btndeVolver = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         MenuItem1 = new javax.swing.JMenu();
         MenuItem1_1 = new javax.swing.JMenuItem();
@@ -27,7 +38,6 @@ public class Reportes extends javax.swing.JFrame {
         MenuItem2_2 = new javax.swing.JMenuItem();
         jMenuItem2_3 = new javax.swing.JMenuItem();
         MenuItem2_4 = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
         Menuitem2_5 = new javax.swing.JMenuItem();
         Menuitem2_7 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -62,7 +72,16 @@ public class Reportes extends javax.swing.JFrame {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/logo ferreteria.jpeg"))); // NOI18N
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 160, 180));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 160, 180));
+
+        btndeVolver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Devolver.png"))); // NOI18N
+        btndeVolver.setText("INICIO");
+        btndeVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btndeVolverActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btndeVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, 140, 40));
 
         MenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/empleadosss.png"))); // NOI18N
         MenuItem1.setText("REGISTRO EMPLEADO");
@@ -116,7 +135,6 @@ public class Reportes extends javax.swing.JFrame {
             }
         });
         Menuitem2.add(MenuItem2_4);
-        Menuitem2.add(jSeparator1);
 
         Menuitem2_5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/totalVendedor.png"))); // NOI18N
         Menuitem2_5.setText("RECAUDO VENDEDOR");
@@ -127,10 +145,22 @@ public class Reportes extends javax.swing.JFrame {
         });
         Menuitem2.add(Menuitem2_5);
 
+        Menuitem2_7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/clientesVen.png"))); // NOI18N
         Menuitem2_7.setText("CLIENTE CON MAS COMPRAS");
+        Menuitem2_7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Menuitem2_7ActionPerformed(evt);
+            }
+        });
         Menuitem2.add(Menuitem2_7);
 
+        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/VendedorVen.png"))); // NOI18N
         jMenuItem2.setText("VENDEDOR CON MAS VENTAS");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         Menuitem2.add(jMenuItem2);
 
         jMenuBar1.add(Menuitem2);
@@ -197,6 +227,28 @@ public class Reportes extends javax.swing.JFrame {
         producto.show();
     }//GEN-LAST:event_Menuitem2_2ActionPerformed
 
+    private void btndeVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndeVolverActionPerformed
+        
+             
+     Inicio ini = new Inicio(emplea,usar,ides);
+        ini.setVisible(true);
+         dispose();
+    }//GEN-LAST:event_btndeVolverActionPerformed
+
+    private void Menuitem2_7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Menuitem2_7ActionPerformed
+        // TODO add your handling code here:
+          JIFClienteMasCompras clientes = new JIFClienteMasCompras();
+        JescritorioReportes.add(clientes);
+        clientes.show();
+    }//GEN-LAST:event_Menuitem2_7ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+           JIFVendedorMasVentas vende = new JIFVendedorMasVentas();
+        JescritorioReportes.add(vende);
+        vende.show();
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -239,12 +291,12 @@ public class Reportes extends javax.swing.JFrame {
     private javax.swing.JMenuItem Menuitem2_2;
     private javax.swing.JMenuItem Menuitem2_5;
     private javax.swing.JMenuItem Menuitem2_7;
+    private javax.swing.JButton btndeVolver;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem2_3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPopupMenu.Separator jSeparator1;
     // End of variables declaration//GEN-END:variables
 }

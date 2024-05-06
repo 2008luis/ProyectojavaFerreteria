@@ -12,12 +12,20 @@ import javax.swing.table.DefaultTableModel;
 
 public class Inventario extends javax.swing.JFrame {
 
+    int emplea, aid;
+    String usua;
 
-    public Inventario() {
-
+    public Inventario(int emple, String usuarios, int id) {
+        this.emplea=emple;
+        this.usua = usuarios;
+        this.aid=id;
         initComponents();
+        this.setLocationRelativeTo(null);
         mostrar();
 
+    }
+
+    private Inventario() {
     }
 
     /**
@@ -117,9 +125,10 @@ public class Inventario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDevolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDevolverActionPerformed
-        dispose();
-     Inicio ini = new Inicio();
+    
+     Inicio ini = new Inicio(emplea,usua,aid);
         ini.setVisible(true);
+            dispose();
     }//GEN-LAST:event_btnDevolverActionPerformed
 
     
