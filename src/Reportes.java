@@ -11,6 +11,7 @@ public class Reportes extends javax.swing.JFrame {
 int emplea,ides;
     String usar;
     public Reportes(int idempleados, String usuarios, int id) {
+           this.setUndecorated(true);
         initComponents();
          this.emplea=idempleados;
         this.usar=usuarios;

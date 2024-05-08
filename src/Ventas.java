@@ -25,6 +25,7 @@ public class Ventas extends javax.swing.JFrame {
     String usua;
 
     public Ventas(int idEmpleado, String usuario, int iD) {
+         this.setUndecorated(true);
         initComponents();
         this.setLocationRelativeTo(null);
         this.idEmpleados = idEmpleado;

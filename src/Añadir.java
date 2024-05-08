@@ -15,17 +15,20 @@ public class Añadir extends javax.swing.JFrame {
     
 
     String nombre, categoria;
-    int codigo,cantidad;
+    int codigo, cantidad;
     double precio, precioVenta;
-    int emplea,ides;
+    int emplea, ides;
     String usar;
+
     public Añadir(int idempleados, String usuarios, int id) {
+        this.setUndecorated(true);
         initComponents();
-        this.emplea=idempleados;
-        this.usar=usuarios;
-        this.ides=id;
-     Conexiones con = new Conexiones();
-     mostrarDatos();
+        this.setLocationRelativeTo(null);
+        this.emplea = idempleados;
+        this.usar = usuarios;
+        this.ides = id;
+        Conexiones con = new Conexiones();
+        mostrarDatos();
         
     }
 
@@ -117,8 +120,8 @@ public class Añadir extends javax.swing.JFrame {
         ));
         tablaregistroProducto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         tablaregistroProducto.setGridColor(new java.awt.Color(255, 51, 51));
-        tablaregistroProducto.setSelectionBackground(new java.awt.Color(204, 204, 204));
-        tablaregistroProducto.setSelectionForeground(new java.awt.Color(204, 204, 204));
+        tablaregistroProducto.setSelectionBackground(new java.awt.Color(153, 204, 255));
+        tablaregistroProducto.setSelectionForeground(new java.awt.Color(0, 0, 0));
         tablaregistroProducto.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tablaregistroProductoMouseClicked(evt);
@@ -126,7 +129,7 @@ public class Añadir extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tablaregistroProducto);
 
-        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 1000, 370));
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 1010, 370));
 
         jLabel6.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
@@ -165,6 +168,11 @@ public class Añadir extends javax.swing.JFrame {
         btnmodificar.setText("MODIFICAR");
         btnmodificar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnmodificar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnmodificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnmodificarActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnmodificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 190, 60));
 
         btnEliminar.setBackground(new java.awt.Color(102, 204, 255));
@@ -186,7 +194,8 @@ public class Añadir extends javax.swing.JFrame {
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/logo ferreteria.jpeg"))); // NOI18N
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 150, 150));
 
-        btnDevolver.setBackground(new java.awt.Color(51, 51, 255));
+        btnDevolver.setBackground(new java.awt.Color(255, 51, 102));
+        btnDevolver.setForeground(new java.awt.Color(0, 0, 0));
         btnDevolver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Devolver.png"))); // NOI18N
         btnDevolver.setText("DEVOLVER");
         btnDevolver.addActionListener(new java.awt.event.ActionListener() {
@@ -202,16 +211,13 @@ public class Añadir extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 1000, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(2, 2, 2)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 610, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 32, Short.MAX_VALUE))
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -258,17 +264,55 @@ public class Añadir extends javax.swing.JFrame {
         ini.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnDevolverActionPerformed
+
+    private void btnmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmodificarActionPerformed
+   Conexiones con = new Conexiones();
+        try (Connection connection = DriverManager.getConnection(con.getUrl(), con.getUser(), con.getPass())) {
+   
+            String nuevoNombre = txtnombreProducto.getText();
+    int nuevaCantidad = Integer.parseInt(txtcantidadProducto.getText());
+    double nuevoPrecio = Double.parseDouble(txtprecioProducto.getText());
     
-    public void guardarProductos() {
-        codigo = Integer.parseInt(txtcodigoProducto.getText());
-        cantidad = Integer.parseInt(txtcantidadProducto.getText());
-        precio = Double.parseDouble(txtprecioProducto.getText());
-        nombre = txtnombreProducto.getText().toUpperCase();
-        categoria = txtcategoriaProducto.getText().toUpperCase();
-        precioVenta = precio * 2;
-        Conexiones con = new Conexiones();
-        try {
-            Connection connection = DriverManager.getConnection(con.getUrl(), con.getUser(), con.getPass());
+
+    // Ejecutar la consul
+    String sql = "UPDATE producto SET nombreProducto     = ?, cantidad = ?, precio = ? WHERE id_producto = ?";
+    PreparedStatement stmt = connection.prepareStatement(sql);
+    stmt.setString(1, nuevoNombre);
+    stmt.setInt(2, nuevaCantidad);
+    stmt.setDouble(3, nuevoPrecio);
+    int filasActualizadas = stmt.executeUpdate();
+    if (filasActualizadas > 0) {
+        JOptionPane.showMessageDialog(rootPane, "Producto actualizado exitosamente");
+    } else {
+        JOptionPane.showMessageDialog(rootPane, "No se pudo actualizar el producto");
+    }
+} catch (SQLException e) {
+    e.printStackTrace();
+    JOptionPane.showMessageDialog(rootPane, "Error al actualizar el producto: " + e.getMessage());
+} catch (NumberFormatException e) {
+    JOptionPane.showMessageDialog(rootPane, "Por favor ingrese valores numéricos válidos para la cantidad y el precio");
+}
+    }//GEN-LAST:event_btnmodificarActionPerformed
+   public void guardarProductos() {
+    codigo = Integer.parseInt(txtcodigoProducto.getText());
+    cantidad = Integer.parseInt(txtcantidadProducto.getText());
+    precio = Double.parseDouble(txtprecioProducto.getText());
+    nombre = txtnombreProducto.getText().toUpperCase();
+    categoria = txtcategoriaProducto.getText().toUpperCase();
+    precioVenta = precio * 2;
+    Conexiones con = new Conexiones();
+    try {
+        Connection connection = DriverManager.getConnection(con.getUrl(), con.getUser(), con.getPass());
+        PreparedStatement stmtExiste = connection.prepareStatement("call validarProductoExistente(?,?)");
+        stmtExiste.setString(1, nombre);
+        stmtExiste.setInt(2, codigo);
+        ResultSet rsExiste = stmtExiste.executeQuery();
+        
+        rsExiste.next();
+        int totalExistente = rsExiste.getInt("total");
+        if (totalExistente > 0) {
+            JOptionPane.showMessageDialog(rootPane, "El producto ya está registrado, o el código ya tiene producto");
+        } else {
             PreparedStatement stmt = connection.prepareStatement("call agregarProducto(?,?,?,?,?,?)");
             stmt.setString(1, nombre);
             stmt.setInt(2, codigo);
@@ -276,27 +320,22 @@ public class Añadir extends javax.swing.JFrame {
             stmt.setDouble(4, precio);
             stmt.setDouble(5, precioVenta);
             stmt.setInt(6, cantidad);
-
             stmt.executeUpdate();
-
             JOptionPane.showMessageDialog(rootPane, "Guardado con éxito");
             mostrarDatos();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(rootPane, "Error de base de datos: " + e.getMessage());
-
         }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(rootPane, "Error de base de datos: " + e.getMessage());
     }
+}
     public void mostrarDatos() {
         try {
-      
-                 DefaultTableModel model = new DefaultTableModel();
+            DefaultTableModel model = new DefaultTableModel();
             tablaregistroProducto.setModel(model);
-            
             Conexiones con = new Conexiones();
-
             try (Connection connection = DriverManager.getConnection(con.getUrl(), con.getUser(), con.getPass())) {
-          
+
                 try (PreparedStatement stmt = connection.prepareCall("call mostrardatosProducto()")) {
                     ResultSet ps = stmt.executeQuery();
                     ResultSetMetaData metaData = ps.getMetaData();

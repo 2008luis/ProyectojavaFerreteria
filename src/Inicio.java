@@ -8,6 +8,7 @@ public class Inicio extends javax.swing.JFrame {
    int idemple;
 
     public Inicio(int ID, String Usuario, int idEmpleado) {
+          this.setUndecorated(true);
         initComponents();
         this.id = ID;
         this.setLocationRelativeTo(null);
@@ -23,7 +24,7 @@ public class Inicio extends javax.swing.JFrame {
     public Inicio() {
       
     }
-
+   
   
 
     @SuppressWarnings("unchecked")
@@ -112,7 +113,7 @@ public class Inicio extends javax.swing.JFrame {
         btnInventario.setFont(new java.awt.Font("Arial Black", 1, 18)); // NOI18N
         btnInventario.setForeground(new java.awt.Color(255, 255, 255));
         btnInventario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Inventario.png"))); // NOI18N
-        btnInventario.setText("INVENTARIO ");
+        btnInventario.setText("STOCK");
         btnInventario.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnInventario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
