@@ -137,7 +137,12 @@ public class JIFVendedorFechas extends javax.swing.JInternalFrame {
             modelo.addColumn("Precio");
             modelo.addColumn("Total Cantidad Vendida");
             modelo.addColumn("Total Recaudado");
+
+            boolean empleadoEncontrado = false; 
+
             while (rs.next()) {
+                empleadoEncontrado = true; 
+
                 Object[] fila = new Object[6];
                 fila[0] = rs.getString("Vendedor");
                 fila[1] = rs.getInt("Ventas");
@@ -147,6 +152,10 @@ public class JIFVendedorFechas extends javax.swing.JInternalFrame {
                 fila[5] = rs.getDouble("TotalRecaudado");
                 modelo.addRow(fila);
             }
+            if (!empleadoEncontrado) {
+                JOptionPane.showMessageDialog(null, "El empleado '" + txtEmpleado.getText() + "' no tiene ventas realizadas.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
             tableReportes.setModel(modelo);
         } catch (SQLException e) {
             e.printStackTrace();

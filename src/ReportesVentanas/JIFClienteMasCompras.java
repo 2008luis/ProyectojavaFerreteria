@@ -22,6 +22,7 @@ public class JIFClienteMasCompras extends javax.swing.JInternalFrame {
     /**
      * Creates new form JIFClienteMasCompras
      */
+   
     public JIFClienteMasCompras() {
         initComponents();
     }
@@ -107,7 +108,6 @@ public class JIFClienteMasCompras extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Por favor selecciona una fecha de inicio y final", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
         
         Date fechaInicio = new Date(jDatefechaInicio.getDate().getTime());
         Date fechaFinal = new Date(jDatefechaFinal.getDate().getTime());
@@ -119,7 +119,7 @@ public class JIFClienteMasCompras extends javax.swing.JInternalFrame {
             ResultSet rs = stmt.executeQuery();
             DefaultTableModel modelo = new DefaultTableModel();
             modelo.addColumn("CLIENTE ");
-            modelo.addColumn("Total Ventas");
+            modelo.addColumn("Total Compras");
             while (rs.next()) {
                 Object[] fila = new Object[2];
                 fila[0] = rs.getString("Cliente");

@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 public class LOGIN extends javax.swing.JFrame {
 
 String user, pass;    
- Conexiones conex;
+Conexiones conex;
     public LOGIN() {
         initComponents();
         txtusuario.setText("");
@@ -33,26 +33,26 @@ String user, pass;
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("LOGIN");
 
-        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
+        jPanel1.setBackground(new java.awt.Color(0, 51, 204));
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
         jPanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txtusuario.setBackground(new java.awt.Color(204, 204, 204));
         txtusuario.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jPanel1.add(txtusuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 220, 170, 30));
+        jPanel1.add(txtusuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 220, 200, 30));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("USUARIO");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 170, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 180, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("CONTRASEÑA");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 270, 130, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 280, 130, -1));
 
-        btnRegistrar.setBackground(new java.awt.Color(0, 51, 255));
+        btnRegistrar.setBackground(new java.awt.Color(0, 153, 255));
         btnRegistrar.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
         btnRegistrar.setForeground(new java.awt.Color(255, 255, 255));
         btnRegistrar.setText("INGRESAR");
@@ -63,12 +63,12 @@ String user, pass;
                 btnRegistrarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 380, 280, 40));
+        jPanel1.add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 380, 280, 40));
 
         txtpass.setBackground(new java.awt.Color(204, 204, 204));
         txtpass.setText("jPasswordField1");
         txtpass.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jPanel1.add(txtpass, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 320, 170, 30));
+        jPanel1.add(txtpass, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 310, 200, 30));
 
         lbImagenLogin.setBackground(new java.awt.Color(51, 204, 255));
         lbImagenLogin.setForeground(new java.awt.Color(51, 204, 255));
@@ -93,37 +93,34 @@ String user, pass;
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-
         inicioSesion();
         
     }//GEN-LAST:event_btnRegistrarActionPerformed
  public void inicioSesion() {
     try (Connection connection = DriverManager.getConnection(conex.getUrl(), conex.getUser(), conex.getPass())) {
-        user = txtusuario.getText().toUpperCase();
-        pass = String.valueOf(txtpass.getPassword());
+             user = txtusuario.getText().toUpperCase();
+             pass = String.valueOf(txtpass.getPassword());
 
-        PreparedStatement stmt = connection.prepareCall("call validarLogin(?,?)");
-        stmt.setString(1, user);
-        stmt.setString(2, pass);
-        ResultSet rs = stmt.executeQuery();
-        
+            PreparedStatement stmt = connection.prepareCall("call validarLogin(?,?)");
+            stmt.setString(1, user);
+            stmt.setString(2, pass);
+            ResultSet rs = stmt.executeQuery();
 
-        if (rs.next()) {
-            int IdUsuario = rs.getInt("fk_rol");
-           int idEmpleado = rs.getInt("id_empleado");
-         
-            Inicio ini = new Inicio(IdUsuario, user, idEmpleado);
-            ini.setVisible(true);
-           dispose();
-        } else {
-          JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
-         txtpass.setText("");
-         txtusuario.setText("");
+            if (rs.next()) {
+                int IdUsuario = rs.getInt("fk_rol");
+               int  idEmpleado = rs.getInt("id_empleado");
+                Inicio ini = new Inicio(IdUsuario, user, idEmpleado);
+                ini.setVisible(true);
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
+                txtpass.setText("");
+                txtusuario.setText("");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.toString());
         }
-    } catch (SQLException e) {
-        System.out.println( e.toString());
     }
-}
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

@@ -14,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class Ventas extends javax.swing.JFrame {
 
+  
     ArrayList<Productos> listaproducto;
     private int idCliente;
     String nit, producto, nombreCliente;
@@ -37,7 +38,6 @@ public class Ventas extends javax.swing.JFrame {
     }
 
     private Ventas() {
-
     }
 
     @SuppressWarnings("unchecked")
@@ -213,11 +213,9 @@ public class Ventas extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "No hay productos para vender");
             return;
         }
-        
         for (int i = 0; i < modelo.getRowCount(); i++) {
             String nombreProducto = (String) modelo.getValueAt(i, 1);
             int cantidad = (int) modelo.getValueAt(i, 2);
-            
             vender(nombreProducto, cantidad);
         }
         JOptionPane.showMessageDialog(rootPane, "Venta registrada");
@@ -229,7 +227,6 @@ public class Ventas extends javax.swing.JFrame {
         Txtcantidad.setText("");
         cbProducto.setSelectedIndex(0);
         btnVender.setVisible(false);
-
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -274,13 +271,11 @@ public class Ventas extends javax.swing.JFrame {
             String nombre = (String) cbProducto.getSelectedItem();
             PreparedStatement stmtCantidad = connection.prepareStatement("CALL obtenerCantidadProducto(?)");
             stmtCantidad.setString(1, nombre);
-            ResultSet rs = stmtCantidad.executeQuery();
+            ResultSet rs = stmtCantidad.executeQuery(); 
 
             if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
                 if (!"".equals(Txtcantidad.getText())) {
                     int can = Integer.parseInt(Txtcantidad.getText());
-
-                    // Verificar si el producto ya está en la tabla
                     boolean productoExistente = false;
                     DefaultTableModel modelo = (DefaultTableModel) tblProductos.getModel();
                     for (int i = 0; i < modelo.getRowCount(); i++) {
@@ -290,9 +285,7 @@ public class Ventas extends javax.swing.JFrame {
                             break;
                         }
                     }
-
                     if (!productoExistente) {
-                        // Tu lógica para agregar el producto a la tabla si no existe
                         if (rs.next()) {
                             int cantidadDisponible = rs.getInt("cantidad");
                             if (cantidadDisponible >= can) {
@@ -377,7 +370,7 @@ public class Ventas extends javax.swing.JFrame {
         Conexiones conex = new Conexiones();
         try (
                 Connection con = DriverManager.getConnection(conex.getUrl(),
-                        conex.getUser(), conex.getPass())) {
+         conex.getUser(), conex.getPass())) {
             cbProducto.removeAllItems();
             cbProducto.addItem("Seleccione");
             listaproducto.clear();
@@ -395,7 +388,6 @@ public class Ventas extends javax.swing.JFrame {
             System.out.println(e.toString());
         }
     }
-
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

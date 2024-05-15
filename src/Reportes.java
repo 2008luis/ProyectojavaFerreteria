@@ -75,6 +75,8 @@ int emplea,ides;
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/logo ferreteria.jpeg"))); // NOI18N
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 160, 180));
 
+        btndeVolver.setBackground(new java.awt.Color(255, 51, 102));
+        btndeVolver.setForeground(new java.awt.Color(0, 0, 0));
         btndeVolver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Devolver.png"))); // NOI18N
         btndeVolver.setText("INICIO");
         btndeVolver.addActionListener(new java.awt.event.ActionListener() {

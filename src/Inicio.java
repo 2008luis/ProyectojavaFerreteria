@@ -1,19 +1,17 @@
 
-
-
 public class Inicio extends javax.swing.JFrame {
 
     int id;
     String usuario;
-   int idemple;
+    int idemple;
 
     public Inicio(int ID, String Usuario, int idEmpleado) {
-          this.setUndecorated(true);
+        this.setUndecorated(true);
         initComponents();
         this.id = ID;
         this.setLocationRelativeTo(null);
-      Lbmosrtrar.setText( Usuario);
-        this.idemple=idEmpleado;
+        Lbmosrtrar.setText(Usuario);
+        this.idemple = idEmpleado;
         this.usuario = Usuario;
         if (ID != 1) {
             btnProductos.setEnabled(false);
@@ -22,11 +20,7 @@ public class Inicio extends javax.swing.JFrame {
     }
 
     public Inicio() {
-      
     }
-   
-  
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -143,7 +137,6 @@ public class Inicio extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductosActionPerformed
-        
         Añadir aña= new Añadir(idemple, usuario, id);
         aña.setVisible(true);
         dispose();
@@ -163,8 +156,6 @@ public class Inicio extends javax.swing.JFrame {
     }//GEN-LAST:event_btnReportesActionPerformed
 
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
-        // TODO add your handling code here:
-        
        Ventas ven= new Ventas( idemple, usuario, id);
        ven.setVisible(true);
        dispose();
