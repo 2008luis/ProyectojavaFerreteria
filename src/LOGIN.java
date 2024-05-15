@@ -5,18 +5,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+
 public class LOGIN extends javax.swing.JFrame {
 
 String user, pass;    
 Conexiones conex;
+
     public LOGIN() {
+     this.setUndecorated(true);
         initComponents();
         txtusuario.setText("");
         this.setLocationRelativeTo(null);
         txtpass.setText("");
         conex = new Conexiones();
-                
-       
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -24,11 +25,12 @@ Conexiones conex;
 
         jPanel1 = new javax.swing.JPanel();
         txtusuario = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lbUsuario = new javax.swing.JLabel();
+        lbpassword = new javax.swing.JLabel();
         btnRegistrar = new javax.swing.JButton();
         txtpass = new javax.swing.JPasswordField();
         lbImagenLogin = new javax.swing.JLabel();
+        lbSalir = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("LOGIN");
@@ -42,15 +44,15 @@ Conexiones conex;
         txtusuario.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jPanel1.add(txtusuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 220, 200, 30));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("USUARIO");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 180, -1, -1));
+        lbUsuario.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
+        lbUsuario.setForeground(new java.awt.Color(255, 255, 255));
+        lbUsuario.setText("USUARIO");
+        jPanel1.add(lbUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 180, -1, -1));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("CONTRASEÑA");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 280, 130, -1));
+        lbpassword.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
+        lbpassword.setForeground(new java.awt.Color(255, 255, 255));
+        lbpassword.setText("CONTRASEÑA");
+        jPanel1.add(lbpassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 280, 130, -1));
 
         btnRegistrar.setBackground(new java.awt.Color(0, 153, 255));
         btnRegistrar.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
@@ -78,6 +80,18 @@ Conexiones conex;
         jPanel1.add(lbImagenLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 200, 130));
         lbImagenLogin.getAccessibleContext().setAccessibleName("imagenlogin");
 
+        lbSalir.setBackground(new java.awt.Color(0, 0, 0));
+        lbSalir.setForeground(new java.awt.Color(255, 0, 51));
+        lbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Eliminar2.0.png"))); // NOI18N
+        lbSalir.setText("SALIR");
+        lbSalir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lbSalir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbSalirMouseClicked(evt);
+            }
+        });
+        jPanel1.add(lbSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 90, 50));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -96,6 +110,14 @@ Conexiones conex;
         inicioSesion();
         
     }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void lbSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbSalirMouseClicked
+        // TODO add your handling code here:
+        int respuesta = JOptionPane.showConfirmDialog(null, "¿Quieres salir del programa?", "Confirmación", JOptionPane.YES_NO_OPTION);
+        if (respuesta == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
+    }//GEN-LAST:event_lbSalirMouseClicked
  public void inicioSesion() {
     try (Connection connection = DriverManager.getConnection(conex.getUrl(), conex.getUser(), conex.getPass())) {
              user = txtusuario.getText().toUpperCase();
@@ -156,10 +178,11 @@ Conexiones conex;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrar;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lbImagenLogin;
+    private javax.swing.JLabel lbSalir;
+    private javax.swing.JLabel lbUsuario;
+    private javax.swing.JLabel lbpassword;
     private javax.swing.JPasswordField txtpass;
     private javax.swing.JTextField txtusuario;
     // End of variables declaration//GEN-END:variables
