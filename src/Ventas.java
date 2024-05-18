@@ -1,4 +1,6 @@
-
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import java.awt.Desktop;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,13 +13,29 @@ import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Ventas extends javax.swing.JFrame {
 
   
     ArrayList<Productos> listaproducto;
     private int idCliente;
-    String nit, producto, nombreCliente;
+    String nit, producto, nombreClientes;
     double valorApagar;
     int cantidad;
     int idEmpleados;
@@ -175,8 +193,8 @@ public class Ventas extends javax.swing.JFrame {
         jPanel3.setForeground(new java.awt.Color(153, 204, 255));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/logo ferreteria.jpeg"))); // NOI18N
-        jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 160, -1));
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/logoFerreteria.jpeg"))); // NOI18N
+        jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 150, -1));
 
         btnDevolver.setBackground(new java.awt.Color(153, 255, 204));
         btnDevolver.setForeground(new java.awt.Color(0, 0, 0));
@@ -196,7 +214,7 @@ public class Ventas extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 815, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 825, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -219,6 +237,11 @@ public class Ventas extends javax.swing.JFrame {
             vender(nombreProducto, cantidad);
         }
         JOptionPane.showMessageDialog(rootPane, "Venta registrada");
+        try {
+            generarPDF();
+        } catch (DocumentException ex) {
+            Logger.getLogger(Ventas.class.getName()).log(Level.SEVERE, null, ex);
+        }
         modelo.setRowCount(0);
         txtnombreClie.setText("");
         txtApellido.setText("");
@@ -327,7 +350,7 @@ public class Ventas extends javax.swing.JFrame {
 
     public void vender(String producto, int cantidad) {
         Conexiones con = new Conexiones();
-        nombreCliente = txtnombreClie.getText();
+        nombreClientes = txtnombreClie.getText();
         nit = txtcedula.getText();
 
         try {
@@ -349,7 +372,7 @@ public class Ventas extends javax.swing.JFrame {
             java.sql.Date Fechavender = new java.sql.Date(fecha.getTime());
 
             PreparedStatement stmtVenta = connection.prepareStatement("CALL agregarVenta(?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            stmtVenta.setString(1, nombreCliente);
+            stmtVenta.setString(1, nombreClientes);
             stmtVenta.setString(2, nit);
             stmtVenta.setString(3, producto);
             stmtVenta.setInt(4, cantidad);
@@ -366,6 +389,73 @@ public class Ventas extends javax.swing.JFrame {
         }
     }
 
+       public void generarPDF() throws DocumentException {
+         try {
+             String Apellido = txtApellido.getText().toUpperCase();
+             Document doc = new Document();
+             String nombreArchivo = "Factura_" + nombreClientes + "" +  Apellido +  ".pdf";
+             String relativePath = "src/Facturas/" + nombreArchivo;
+             File file = new File(relativePath);
+             file.getParentFile().mkdirs(); // Crea el directorio si no existe
+             PdfWriter.getInstance(doc, new FileOutputStream(file));
+             doc.open();
+             String imagePath = "src/Imagenes/logoFerreteria.jpeg";
+             Image img = Image.getInstance(imagePath);
+             img.scaleToFit(100, 100);
+             img.setAlignment(Element.ALIGN_RIGHT);
+             doc.add(img);
+
+           
+             Paragraph titulo = new Paragraph("Factura de Venta", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 20, Font.BOLD, BaseColor.BLACK));
+             titulo.setAlignment(Element.ALIGN_CENTER);
+             doc.add(titulo);
+            Paragraph datosCliente = new Paragraph();
+             datosCliente.add(new Phrase("Nombre : " + nombreClientes));
+             datosCliente.add(Chunk.NEWLINE); 
+             datosCliente.add(new Phrase("Apellido: " + Apellido));
+             datosCliente.add(Chunk.NEWLINE);
+             datosCliente.add(new Phrase("Cédula : " + nit));
+
+
+             datosCliente.setFont(FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.BLACK));
+             datosCliente.setSpacingBefore(20);
+
+
+             doc.add(datosCliente);
+
+            PdfPTable pdfTable = new PdfPTable(tblProductos.getColumnCount());
+
+            
+            for (int i = 0; i < tblProductos.getColumnCount(); i++) {
+                PdfPCell header = new PdfPCell(new Phrase(tblProductos.getColumnName(i)));
+                header.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                pdfTable.addCell(header);
+            }
+            for (int row = 0; row < tblProductos.getRowCount(); row++) {
+                for (int col = 0; col < tblProductos.getColumnCount(); col++) {
+                    Object value = tblProductos.getValueAt(row, col);
+                    pdfTable.addCell(value != null ? value.toString() : "");
+                }
+            }
+
+            doc.add(pdfTable);
+            doc.close();
+
+            System.out.println("PDF creado exitosamente en: " + file.getAbsolutePath());
+            if (file.exists()) {
+                if (Desktop.isDesktopSupported()) {
+                    Desktop.getDesktop().open(file);
+                } else {
+                    System.out.println("Awt Desktop is not supported!");
+                }
+            } else {
+                System.out.println("File does not exist!");
+            }
+        } catch (DocumentException | IOException ex) {
+            Logger.getLogger(Ventas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public void llenarComboProductos() {
         Conexiones conex = new Conexiones();
         try (
@@ -411,7 +501,7 @@ public class Ventas extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Ventas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+            
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

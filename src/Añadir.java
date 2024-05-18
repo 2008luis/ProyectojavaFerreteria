@@ -191,7 +191,7 @@ public class Añadir extends javax.swing.JFrame {
         btnBuscar.setText("BUSCAR");
         jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 520, 190, 50));
 
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/logo ferreteria.jpeg"))); // NOI18N
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/logoFerreteria.jpeg"))); // NOI18N
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 150, 150));
 
         btnDevolver.setBackground(new java.awt.Color(255, 51, 102));

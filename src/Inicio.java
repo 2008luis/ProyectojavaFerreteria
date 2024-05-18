@@ -116,7 +116,7 @@ public class Inicio extends javax.swing.JFrame {
         });
         jPanel2.add(btnInventario, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, 230, 60));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/logo ferreteria.jpeg"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/logoFerreteria.jpeg"))); // NOI18N
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 150, 150));
 
         btnCerrarsesion.setBackground(new java.awt.Color(255, 0, 0));
