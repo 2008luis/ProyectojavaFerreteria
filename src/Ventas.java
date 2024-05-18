@@ -42,6 +42,7 @@ public class Ventas extends javax.swing.JFrame {
     int item;
     int idprofile;
     String usua;
+    double TotalPagar = 0.00;
 
     public Ventas(int idEmpleado, String usuario, int iD) {
          this.setUndecorated(true);
@@ -80,6 +81,8 @@ public class Ventas extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProductos = new javax.swing.JTable();
+        jLabel9 = new javax.swing.JLabel();
+        LabelTotal = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         btnDevolver = new javax.swing.JButton();
@@ -139,7 +142,7 @@ public class Ventas extends javax.swing.JFrame {
                 btnVenderActionPerformed(evt);
             }
         });
-        jPanel1.add(btnVender, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 540, 220, 70));
+        jPanel1.add(btnVender, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 530, 220, 70));
 
         btnBuscar.setBackground(new java.awt.Color(51, 153, 255));
         btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
@@ -182,12 +185,18 @@ public class Ventas extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Producto", "Nombre", "Cantidad"
+                "Producto", "Nombre", "Cantidad", "Precio Unitario", "Precio Total"
             }
         ));
         jScrollPane1.setViewportView(tblProductos);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 260, 480, 250));
+
+        jLabel9.setText("Total a pagar: ");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 540, -1, -1));
+
+        LabelTotal.setText("_____");
+        jPanel1.add(LabelTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 540, -1, -1));
 
         jPanel3.setBackground(new java.awt.Color(153, 204, 255));
         jPanel3.setForeground(new java.awt.Color(153, 204, 255));
@@ -248,8 +257,10 @@ public class Ventas extends javax.swing.JFrame {
         txtTelefono.setText("");
         txtcedula.setText("");
         Txtcantidad.setText("");
+        LabelTotal.setText("_____");
         cbProducto.setSelectedIndex(0);
         btnVender.setVisible(false);
+        
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -292,7 +303,7 @@ public class Ventas extends javax.swing.JFrame {
         try {
             Connection connection = DriverManager.getConnection(con.getUrl(), con.getUser(), con.getPass());
             String nombre = (String) cbProducto.getSelectedItem();
-            PreparedStatement stmtCantidad = connection.prepareStatement("CALL obtenerCantidadProducto(?)");
+            PreparedStatement stmtCantidad = connection.prepareStatement("CALL obtenerCantidadPrecio(?)");
             stmtCantidad.setString(1, nombre);
             ResultSet rs = stmtCantidad.executeQuery(); 
 
@@ -311,18 +322,26 @@ public class Ventas extends javax.swing.JFrame {
                     if (!productoExistente) {
                         if (rs.next()) {
                             int cantidadDisponible = rs.getInt("cantidad");
+                            double precioProducto = rs.getDouble("precioVenta");
+                            double precioTotal;
+                            precioTotal = precioProducto*can;
                             if (cantidadDisponible >= can) {
                                 item = item + 1;
                                 ArrayList lista = new ArrayList();
                                 lista.add(item);
                                 lista.add(nombre);
                                 lista.add(can);
-                                Object[] o = new Object[3];
+                                lista.add(precioProducto);
+                                lista.add(precioTotal);
+                                Object[] o = new Object[5];
                                 o[0] = lista.get(0);
                                 o[1] = lista.get(1);
                                 o[2] = lista.get(2);
+                                o[3] = lista.get(3);
+                                o[4] = lista.get(4);
                                 modelo.addRow(o);
                                 tblProductos.setModel(modelo);
+                                totalPagar();
                             } else {
                                 JOptionPane.showMessageDialog(rootPane, "No hay la cantidad disponible ");
                             }
@@ -478,6 +497,18 @@ public class Ventas extends javax.swing.JFrame {
             System.out.println(e.toString());
         }
     }
+    
+    public void totalPagar(){
+        TotalPagar = 0.00;
+        int numFila  = tblProductos.getRowCount();
+        for (int i = 0; i < numFila; i++) {
+            double cal = Double.parseDouble(String.valueOf(tblProductos.getModel().getValueAt(i, 4)));
+            TotalPagar = TotalPagar + cal;
+        }
+        LabelTotal.setText(String.format("%.2f", TotalPagar));
+    }
+    
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -511,6 +542,7 @@ public class Ventas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel LabelTotal;
     private javax.swing.JTextField Txtcantidad;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnDevolver;
@@ -524,6 +556,7 @@ public class Ventas extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
