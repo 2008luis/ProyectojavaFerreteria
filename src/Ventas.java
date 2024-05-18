@@ -408,43 +408,42 @@ public class Ventas extends javax.swing.JFrame {
         }
     }
 
-       public void generarPDF() throws DocumentException {
-         try {
-             String Apellido = txtApellido.getText().toUpperCase();
-             Document doc = new Document();
-             String nombreArchivo = "Factura_" + nombreClientes + "" +  Apellido +  ".pdf";
-             String relativePath = "src/Facturas/" + nombreArchivo;
-             File file = new File(relativePath);
-             file.getParentFile().mkdirs(); // Crea el directorio si no existe
-             PdfWriter.getInstance(doc, new FileOutputStream(file));
-             doc.open();
-             String imagePath = "src/Imagenes/logoFerreteria.jpeg";
-             Image img = Image.getInstance(imagePath);
-             img.scaleToFit(100, 100);
-             img.setAlignment(Element.ALIGN_RIGHT);
-             doc.add(img);
+    public void generarPDF() throws DocumentException {
+        try {
+            String Apellido = txtApellido.getText().toUpperCase();
+            Document doc = new Document();
+            String nombreArchivo = "Factura_" + nombreClientes + "_" + Apellido + ".pdf";
+            String relativePath = "src/Facturas/" + nombreArchivo;
+            File file = new File(relativePath);
+            file.getParentFile().mkdirs(); // Crea el directorio si no existe
+            PdfWriter.getInstance(doc, new FileOutputStream(file));
+            doc.open();
 
-           
-             Paragraph titulo = new Paragraph("Factura de Venta", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 20, Font.BOLD, BaseColor.BLACK));
-             titulo.setAlignment(Element.ALIGN_CENTER);
-             doc.add(titulo);
+            // Agregar logo de la ferretería
+            String imagePath = "src/Imagenes/logoFerreteria.jpeg";
+            Image img = Image.getInstance(imagePath);
+            img.scaleToFit(100, 100);
+            img.setAlignment(Element.ALIGN_RIGHT);
+            doc.add(img);
+
+            // Título de la factura
+            Paragraph titulo = new Paragraph("Factura de Venta", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 20, Font.BOLD, BaseColor.BLACK));
+            titulo.setAlignment(Element.ALIGN_CENTER);
+            doc.add(titulo);
+
+            // Información del cliente
             Paragraph datosCliente = new Paragraph();
-             datosCliente.add(new Phrase("Nombre : " + nombreClientes));
-             datosCliente.add(Chunk.NEWLINE); 
-             datosCliente.add(new Phrase("Apellido: " + Apellido));
-             datosCliente.add(Chunk.NEWLINE);
-             datosCliente.add(new Phrase("Cédula : " + nit));
+            datosCliente.add(new Phrase("Nombre : " + nombreClientes));
+            datosCliente.add(Chunk.NEWLINE);
+            datosCliente.add(new Phrase("Apellido: " + Apellido));
+            datosCliente.add(Chunk.NEWLINE);
+            datosCliente.add(new Phrase("Cédula : " + nit));
+            datosCliente.setFont(FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.BLACK));
+            datosCliente.setSpacingBefore(20);
+            doc.add(datosCliente);
 
-
-             datosCliente.setFont(FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.BLACK));
-             datosCliente.setSpacingBefore(20);
-
-
-             doc.add(datosCliente);
-
+            // Detalles de los productos
             PdfPTable pdfTable = new PdfPTable(tblProductos.getColumnCount());
-
-            
             for (int i = 0; i < tblProductos.getColumnCount(); i++) {
                 PdfPCell header = new PdfPCell(new Phrase(tblProductos.getColumnName(i)));
                 header.setBackgroundColor(BaseColor.LIGHT_GRAY);
@@ -456,8 +455,14 @@ public class Ventas extends javax.swing.JFrame {
                     pdfTable.addCell(value != null ? value.toString() : "");
                 }
             }
-
             doc.add(pdfTable);
+
+            // Valor total a pagar
+            totalPagar(); // Calcular el total a pagar
+            Paragraph total = new Paragraph("Total a Pagar: $" + LabelTotal.getText(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, Font.BOLD, BaseColor.BLACK));
+            total.setAlignment(Element.ALIGN_RIGHT);
+            doc.add(total);
+
             doc.close();
 
             System.out.println("PDF creado exitosamente en: " + file.getAbsolutePath());
@@ -473,6 +478,7 @@ public class Ventas extends javax.swing.JFrame {
         } catch (DocumentException | IOException ex) {
             Logger.getLogger(Ventas.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
     
     public void llenarComboProductos() {
