@@ -250,6 +250,8 @@ public class Ventas extends javax.swing.JFrame {
             generarPDF();
         } catch (DocumentException ex) {
             Logger.getLogger(Ventas.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Ventas.class.getName()).log(Level.SEVERE, null, ex);
         }
         modelo.setRowCount(0);
         txtnombreClie.setText("");
@@ -408,7 +410,7 @@ public class Ventas extends javax.swing.JFrame {
         }
     }
 
-    public void generarPDF() throws DocumentException {
+    public void generarPDF() throws DocumentException, IOException {
         try {
             String Apellido = txtApellido.getText().toUpperCase();
             Document doc = new Document();
@@ -438,24 +440,31 @@ public class Ventas extends javax.swing.JFrame {
             datosCliente.add(new Phrase("Apellido: " + Apellido));
             datosCliente.add(Chunk.NEWLINE);
             datosCliente.add(new Phrase("Cédula : " + nit));
+            datosCliente.add(Chunk.NEWLINE);  // Agregar un salto de línea después de la cédula
             datosCliente.setFont(FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.BLACK));
             datosCliente.setSpacingBefore(20);
+            datosCliente.add(Chunk.NEWLINE); 
             doc.add(datosCliente);
-
             // Detalles de los productos
             PdfPTable pdfTable = new PdfPTable(tblProductos.getColumnCount());
+            pdfTable.setWidthPercentage(100); // Ajusta el ancho de la tabla al 100% de la página
+            pdfTable.setHorizontalAlignment(Element.ALIGN_LEFT); // Alinea la tabla a la izquierda
+
+            // Añadir cabeceras
             for (int i = 0; i < tblProductos.getColumnCount(); i++) {
                 PdfPCell header = new PdfPCell(new Phrase(tblProductos.getColumnName(i)));
                 header.setBackgroundColor(BaseColor.LIGHT_GRAY);
                 pdfTable.addCell(header);
             }
+
+            // Añadir contenido de las filas
             for (int row = 0; row < tblProductos.getRowCount(); row++) {
                 for (int col = 0; col < tblProductos.getColumnCount(); col++) {
                     Object value = tblProductos.getValueAt(row, col);
                     pdfTable.addCell(value != null ? value.toString() : "");
                 }
             }
-            doc.add(pdfTable);
+            doc.add(pdfTable); // Añadir la tabla al documento después de llenarla con datos
 
             // Valor total a pagar
             totalPagar(); // Calcular el total a pagar
@@ -463,22 +472,19 @@ public class Ventas extends javax.swing.JFrame {
             total.setAlignment(Element.ALIGN_RIGHT);
             doc.add(total);
 
-            doc.close();
+            doc.close(); // Cerrar el documento
 
-            System.out.println("PDF creado exitosamente en: " + file.getAbsolutePath());
             if (file.exists()) {
                 if (Desktop.isDesktopSupported()) {
                     Desktop.getDesktop().open(file);
                 } else {
-                    System.out.println("Awt Desktop is not supported!");
                 }
             } else {
-                System.out.println("File does not exist!");
+                System.out.println("archivo no existe");
             }
         } catch (DocumentException | IOException ex) {
             Logger.getLogger(Ventas.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
     
     public void llenarComboProductos() {
