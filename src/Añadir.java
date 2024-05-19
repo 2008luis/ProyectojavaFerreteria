@@ -1,3 +1,4 @@
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,13 +8,9 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-
-
 public class Añadir extends javax.swing.JFrame {
 
-  
-    
-
+    private int idProducto;
     String nombre, categoria;
     int codigo, cantidad;
     double precio, precioVenta;
@@ -29,13 +26,12 @@ public class Añadir extends javax.swing.JFrame {
         this.ides = id;
         Conexiones con = new Conexiones();
         mostrarDatos();
-        
+
     }
 
     private Añadir() {
     }
 
-   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -57,9 +53,9 @@ public class Añadir extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         btnmodificar = new javax.swing.JButton();
-        btnEliminar = new javax.swing.JButton();
+        btnDesactivar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
-        jLabel7 = new javax.swing.JLabel();
+        lbImagen = new javax.swing.JLabel();
         btnDevolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -175,24 +171,34 @@ public class Añadir extends javax.swing.JFrame {
         });
         jPanel1.add(btnmodificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 190, 60));
 
-        btnEliminar.setBackground(new java.awt.Color(102, 204, 255));
-        btnEliminar.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
-        btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
-        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Eliminar2.0.png"))); // NOI18N
-        btnEliminar.setText("ELIMINAR");
-        btnEliminar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        btnEliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 430, 190, 60));
+        btnDesactivar.setBackground(new java.awt.Color(102, 204, 255));
+        btnDesactivar.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
+        btnDesactivar.setForeground(new java.awt.Color(255, 255, 255));
+        btnDesactivar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Eliminar2.0.png"))); // NOI18N
+        btnDesactivar.setText("DESACTIVAR");
+        btnDesactivar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnDesactivar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDesactivar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDesactivarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnDesactivar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 430, 190, 60));
 
         btnBuscar.setBackground(new java.awt.Color(102, 204, 255));
         btnBuscar.setFont(new java.awt.Font("Segoe UI Black", 1, 12)); // NOI18N
         btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Buscar.png"))); // NOI18N
         btnBuscar.setText("BUSCAR");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 520, 190, 50));
 
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/logoFerreteria.jpeg"))); // NOI18N
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 150, 150));
+        lbImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/logoFerreteria.jpeg"))); // NOI18N
+        jPanel1.add(lbImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 150, 150));
 
         btnDevolver.setBackground(new java.awt.Color(255, 51, 102));
         btnDevolver.setForeground(new java.awt.Color(0, 0, 0));
@@ -244,8 +250,8 @@ public class Añadir extends javax.swing.JFrame {
         txtnombreProducto.setText("");
         txtprecioProducto.setText("");
     }//GEN-LAST:event_btnAgregarProductoActionPerformed
-    
-    
+
+
     private void tablaregistroProductoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaregistroProductoMouseClicked
         //esta parte del codigo es para que presione un valor en la tabla y llene los campos
 
@@ -258,77 +264,154 @@ public class Añadir extends javax.swing.JFrame {
     }//GEN-LAST:event_tablaregistroProductoMouseClicked
 
     private void btnDevolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDevolverActionPerformed
-     
-            
-     Inicio ini = new Inicio(emplea,usar,ides);
+
+        Inicio ini = new Inicio(emplea, usar, ides);
         ini.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnDevolverActionPerformed
 
     private void btnmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmodificarActionPerformed
-   Conexiones con = new Conexiones();
-        try (Connection connection = DriverManager.getConnection(con.getUrl(), con.getUser(), con.getPass())) {
-   
-            String nuevoNombre = txtnombreProducto.getText();
-    int nuevaCantidad = Integer.parseInt(txtcantidadProducto.getText());
-    double nuevoPrecio = Double.parseDouble(txtprecioProducto.getText());
-    
+        Conexiones con = new Conexiones();
 
-    // Ejecutar la consul
-    String sql = "UPDATE producto SET nombreProducto     = ?, cantidad = ?, precio = ? WHERE id_producto = ?";
-    PreparedStatement stmt = connection.prepareStatement(sql);
-    stmt.setString(1, nuevoNombre);
-    stmt.setInt(2, nuevaCantidad);
-    stmt.setDouble(3, nuevoPrecio);
-    int filasActualizadas = stmt.executeUpdate();
-    if (filasActualizadas > 0) {
-        JOptionPane.showMessageDialog(rootPane, "Producto actualizado exitosamente");
-    } else {
-        JOptionPane.showMessageDialog(rootPane, "No se pudo actualizar el producto");
-    }
-} catch (SQLException e) {
-    e.printStackTrace();
-    JOptionPane.showMessageDialog(rootPane, "Error al actualizar el producto: " + e.getMessage());
-} catch (NumberFormatException e) {
-    JOptionPane.showMessageDialog(rootPane, "Por favor ingrese valores numéricos válidos para la cantidad y el precio");
-}
-    }//GEN-LAST:event_btnmodificarActionPerformed
-   public void guardarProductos() {
-    codigo = Integer.parseInt(txtcodigoProducto.getText());
-    cantidad = Integer.parseInt(txtcantidadProducto.getText());
-    precio = Double.parseDouble(txtprecioProducto.getText());
-    nombre = txtnombreProducto.getText().toUpperCase();
-    categoria = txtcategoriaProducto.getText().toUpperCase();
-    precioVenta = precio * 2;
-    Conexiones con = new Conexiones();
-    try {
-        Connection connection = DriverManager.getConnection(con.getUrl(), con.getUser(), con.getPass());
-        PreparedStatement stmtExiste = connection.prepareStatement("call validarProductoExistente(?,?)");
-        stmtExiste.setString(1, nombre);
-        stmtExiste.setInt(2, codigo);
-        ResultSet rsExiste = stmtExiste.executeQuery();
-        
-        rsExiste.next();
-        int totalExistente = rsExiste.getInt("total");
-        if (totalExistente > 0) {
-            JOptionPane.showMessageDialog(rootPane, "El producto ya está registrado, o el código ya tiene producto");
-        } else {
-            PreparedStatement stmt = connection.prepareStatement("call agregarProducto(?,?,?,?,?,?)");
-            stmt.setString(1, nombre);
-            stmt.setInt(2, codigo);
-            stmt.setString(3, categoria);
-            stmt.setDouble(4, precio);
-            stmt.setDouble(5, precioVenta);
-            stmt.setInt(6, cantidad);
-            stmt.executeUpdate();
-            JOptionPane.showMessageDialog(rootPane, "Guardado con éxito");
-            mostrarDatos();
+        try (Connection connection = DriverManager.getConnection(con.getUrl(), con.getUser(), con.getPass())) {
+
+            PreparedStatement selectStmt = connection.prepareCall("call obteneridProducto(?)");
+            selectStmt.setString(1, nombre);
+            ResultSet rs = selectStmt.executeQuery();
+            if (rs.next()) {
+                idProducto = rs.getInt("id_producto");
+
+                String nuevoNombre = txtnombreProducto.getText();
+                int nuevaCantidad = Integer.parseInt(txtcantidadProducto.getText());
+                double nuevoPrecio = Double.parseDouble(txtprecioProducto.getText());
+                double precioVenta = nuevoPrecio * 2;
+
+                String sql = "UPDATE producto SET  cantidad = ?, precio = ?, precioVenta = ? WHERE id_producto = ?";
+                PreparedStatement updateStmt = connection.prepareStatement(sql);
+                updateStmt.setInt(1, nuevaCantidad);
+                updateStmt.setDouble(2, nuevoPrecio);
+                updateStmt.setDouble(3, precioVenta);
+                updateStmt.setInt(4, idProducto);
+
+                int filasActualizadas = updateStmt.executeUpdate();
+
+                if (filasActualizadas > 0) {
+                    JOptionPane.showMessageDialog(rootPane, "Producto actualizado exitosamente");
+                    mostrarDatos();
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "No se pudo actualizar el producto");
+                }
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Producto no encontrado");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(rootPane, "Error al actualizar el producto: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(rootPane, "Por favor ingrese valores numéricos válidos para la cantidad y el precio");
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(rootPane, "Error de base de datos: " + e.getMessage());
+    }//GEN-LAST:event_btnmodificarActionPerformed
+
+    private void btnDesactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDesactivarActionPerformed
+       if(txtnombreProducto.getText().isEmpty()){
+        JOptionPane.showMessageDialog(rootPane, "ingresa el nombre del producto desactivar", "elije un producto", JOptionPane.ERROR_MESSAGE);
+        return;
     }
+        Conexiones con = new Conexiones();
+        try (Connection conexion = DriverManager.getConnection(con.url, con.user, con.pass)) {
+            try (PreparedStatement stmtConsulta = conexion.prepareCall("call obteneridProducto(?)")) {
+                nombre = txtnombreProducto.getText();
+                stmtConsulta.setString(1, nombre);
+                try (ResultSet rs = stmtConsulta.executeQuery()) {
+                    if (rs.next()) {
+                        idProducto = rs.getInt("id_producto");
+                        String procedimiento = "{call desactivarProducto(?)}";
+                        try (PreparedStatement stmtDesactivar = conexion.prepareCall(procedimiento)) {
+                            stmtDesactivar.setInt(1, idProducto);
+                            stmtDesactivar.executeUpdate();
+                            System.out.println("Producto desactivado correctamente.");
+                            mostrarDatos();
+                        }
+                    } else {
+                        System.out.println("No se encontró ningún producto con ese nombre.");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al desactivar el producto: " + e.getMessage());
 }
+    }//GEN-LAST:event_btnDesactivarActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+            Conexiones con = new Conexiones();
+        try (Connection conexion = DriverManager.getConnection(con.url, con.user, con.pass)) {
+           
+            String procedimientoBuscar = "{call buscar(?)}";
+
+            try (PreparedStatement stmtBuscar = conexion.prepareCall(procedimientoBuscar)) {
+              
+                stmtBuscar.setInt(1, codigo);
+
+            
+                try (ResultSet rs = stmtBuscar.executeQuery()) {
+                    DefaultTableModel modeloTabla = new DefaultTableModel();
+                    modeloTabla.addColumn("Nombre Producto");
+                    modeloTabla.addColumn("Precio");
+                    modeloTabla.addColumn("Precio Venta");
+                    modeloTabla.addColumn("Cantidad");
+                    while (rs.next()) {
+                        Object[] fila = new Object[4];
+                        fila[0] = rs.getString("nombreProducto");
+                        fila[1] = rs.getDouble("precio");
+                        fila[2] = rs.getDouble("precioVenta");
+                        fila[3] = rs.getInt("cantidad");
+                        modeloTabla.addRow(fila);
+                    }
+                    tablaregistroProducto.setModel(modeloTabla);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al buscar el producto: " + e.getMessage());
+        }
+        
+    }//GEN-LAST:event_btnBuscarActionPerformed
+    public void guardarProductos() {
+        codigo = Integer.parseInt(txtcodigoProducto.getText());
+        cantidad = Integer.parseInt(txtcantidadProducto.getText());
+        precio = Double.parseDouble(txtprecioProducto.getText());
+        nombre = txtnombreProducto.getText().toUpperCase();
+        categoria = txtcategoriaProducto.getText().toUpperCase();
+        precioVenta = precio * 2;
+        Conexiones con = new Conexiones();
+        try {
+            Connection connection = DriverManager.getConnection(con.getUrl(), con.getUser(), con.getPass());
+            PreparedStatement stmtExiste = connection.prepareStatement("call validarProductoExistente(?,?)");
+            stmtExiste.setString(1, nombre);
+            stmtExiste.setInt(2, codigo);
+            ResultSet rsExiste = stmtExiste.executeQuery();
+
+            rsExiste.next();
+            int totalExistente = rsExiste.getInt("total");
+            if (totalExistente > 0) {
+                JOptionPane.showMessageDialog(rootPane, "El producto ya está registrado, o el código ya tiene producto");
+            } else {
+                PreparedStatement stmt = connection.prepareStatement("call agregarProducto(?,?,?,?,?,?)");
+                stmt.setString(1, nombre);
+                stmt.setInt(2, codigo);
+                stmt.setString(3, categoria);
+                stmt.setDouble(4, precio);
+                stmt.setDouble(5, precioVenta);
+                stmt.setInt(6, cantidad);
+                stmt.executeUpdate();
+                JOptionPane.showMessageDialog(rootPane, "Guardado con éxito");
+                mostrarDatos();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(rootPane, "Error de base de datos: " + e.getMessage());
+        }
+    }
+
     public void mostrarDatos() {
         try {
             DefaultTableModel model = new DefaultTableModel();
@@ -370,6 +453,7 @@ public class Añadir extends javax.swing.JFrame {
         }
         return true;
     }
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -405,19 +489,19 @@ public class Añadir extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarProducto;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnDesactivar;
     private javax.swing.JButton btnDevolver;
-    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnmodificar;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbImagen;
     private javax.swing.JTable tablaregistroProducto;
     private javax.swing.JTextField txtcantidadProducto;
     private javax.swing.JTextField txtcategoriaProducto;
