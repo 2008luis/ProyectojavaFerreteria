@@ -27,6 +27,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -413,11 +414,12 @@ public class Ventas extends javax.swing.JFrame {
     public void generarPDF() throws DocumentException, IOException {
         try {
             String Apellido = txtApellido.getText().toUpperCase();
-            Document doc = new Document();
             String nombreArchivo = "Factura_" + nombreClientes + "_" + Apellido + ".pdf";
             String relativePath = "src/Facturas/" + nombreArchivo;
             File file = new File(relativePath);
             file.getParentFile().mkdirs(); // Crea el directorio si no existe
+
+            Document doc = new Document();
             PdfWriter.getInstance(doc, new FileOutputStream(file));
             doc.open();
 
@@ -433,9 +435,29 @@ public class Ventas extends javax.swing.JFrame {
             titulo.setAlignment(Element.ALIGN_CENTER);
             doc.add(titulo);
 
+            // Fecha de emisión
+            String fechaEmision = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+            Paragraph fecha = new Paragraph("Fecha de Emisión: " + fechaEmision, FontFactory.getFont(FontFactory.HELVETICA, 12));
+            fecha.setAlignment(Element.ALIGN_RIGHT);
+            doc.add(fecha);
+
+            // Información del Emisor
+            Paragraph emisor = new Paragraph();
+            emisor.add(new Phrase("Emisor: PINTUACCESORIOS LA PERLA S.A.S.", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
+            emisor.add(Chunk.NEWLINE);
+            emisor.add(new Phrase("NIT: 123456789-1"));
+            emisor.add(Chunk.NEWLINE);
+            emisor.add(new Phrase("Teléfono: (57) 300 7684783 -- (57) 301 4659906"));
+            emisor.add(Chunk.NEWLINE);
+            emisor.add(new Phrase("Correo Electrónico: camilocamilo122002@gmail.com -- correaluisam3789@gmail.com"));
+            emisor.add(Chunk.NEWLINE);
+            emisor.add(new Phrase("Dirección: CR 19 29 D 15 CA 1 BRR VILLA BELLA, MAGDALENA, SANTA MARTA"));
+            emisor.setSpacingBefore(20);
+            doc.add(emisor);
+
             // Información del cliente
             Paragraph datosCliente = new Paragraph();
-            datosCliente.add(new Phrase("Nombre : " + nombreClientes));
+            datosCliente.add(new Phrase("Receptor: " + nombreClientes, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
             datosCliente.add(Chunk.NEWLINE);
             datosCliente.add(new Phrase("Apellido: " + Apellido));
             datosCliente.add(Chunk.NEWLINE);
@@ -445,15 +467,17 @@ public class Ventas extends javax.swing.JFrame {
             datosCliente.setSpacingBefore(20);
             datosCliente.add(Chunk.NEWLINE); 
             doc.add(datosCliente);
-            // Detalles de los productos
+
+            // Tabla de productos
             PdfPTable pdfTable = new PdfPTable(tblProductos.getColumnCount());
             pdfTable.setWidthPercentage(100); // Ajusta el ancho de la tabla al 100% de la página
             pdfTable.setHorizontalAlignment(Element.ALIGN_LEFT); // Alinea la tabla a la izquierda
 
             // Añadir cabeceras
             for (int i = 0; i < tblProductos.getColumnCount(); i++) {
-                PdfPCell header = new PdfPCell(new Phrase(tblProductos.getColumnName(i)));
-                header.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                PdfPCell header = new PdfPCell(new Phrase(tblProductos.getColumnName(i), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.WHITE)));
+                header.setBackgroundColor(BaseColor.DARK_GRAY);
+                header.setHorizontalAlignment(Element.ALIGN_CENTER);
                 pdfTable.addCell(header);
             }
 
@@ -461,24 +485,34 @@ public class Ventas extends javax.swing.JFrame {
             for (int row = 0; row < tblProductos.getRowCount(); row++) {
                 for (int col = 0; col < tblProductos.getColumnCount(); col++) {
                     Object value = tblProductos.getValueAt(row, col);
-                    pdfTable.addCell(value != null ? value.toString() : "");
+                    PdfPCell cell = new PdfPCell(new Phrase(value != null ? value.toString() : "", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    pdfTable.addCell(cell);
                 }
             }
+            pdfTable.setSpacingBefore(20);
             doc.add(pdfTable); // Añadir la tabla al documento después de llenarla con datos
 
             // Valor total a pagar
             totalPagar(); // Calcular el total a pagar
-            Paragraph total = new Paragraph("Total a Pagar: $" + LabelTotal.getText(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, Font.BOLD, BaseColor.BLACK));
+            Paragraph total = new Paragraph("Total a Pagar: $" + LabelTotal.getText(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14, Font.BOLD, BaseColor.BLACK));
             total.setAlignment(Element.ALIGN_RIGHT);
+            total.setSpacingBefore(20);
             doc.add(total);
 
-            doc.close(); // Cerrar el documento
+            // Mensaje de agradecimiento
+            Paragraph agradecimiento = new Paragraph("Gracias por ser parte de nuestra familia.", FontFactory.getFont(FontFactory.HELVETICA, 12, Font.ITALIC, BaseColor.GRAY));
+            agradecimiento.setAlignment(Element.ALIGN_CENTER);
+            agradecimiento.setSpacingBefore(20);
+            doc.add(agradecimiento);
+
+            // Cerrar documento
+            doc.close();
 
             if (file.exists()) {
                 if (Desktop.isDesktopSupported()) {
                     Desktop.getDesktop().open(file);
-                } else {
-                }
+                } 
             } else {
                 System.out.println("archivo no existe");
             }
@@ -486,6 +520,7 @@ public class Ventas extends javax.swing.JFrame {
             Logger.getLogger(Ventas.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     
     public void llenarComboProductos() {
         Conexiones conex = new Conexiones();
