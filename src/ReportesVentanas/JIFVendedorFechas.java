@@ -132,7 +132,6 @@ public class JIFVendedorFechas extends javax.swing.JInternalFrame {
             ResultSet rs = stmt.executeQuery();
             DefaultTableModel modelo = new DefaultTableModel();
             modelo.addColumn("Vendedor");
-            modelo.addColumn("Ventas");
             modelo.addColumn("Producto");
             modelo.addColumn("Precio");
             modelo.addColumn("Total Cantidad Vendida");
@@ -143,13 +142,12 @@ public class JIFVendedorFechas extends javax.swing.JInternalFrame {
             while (rs.next()) {
                 empleadoEncontrado = true; 
 
-                Object[] fila = new Object[6];
+                Object[] fila = new Object[5];
                 fila[0] = rs.getString("Vendedor");
-                fila[1] = rs.getInt("Ventas");
-                fila[2] = rs.getString("Producto");
-                fila[3] = rs.getDouble("Precio");
-                fila[4] = rs.getInt("TotalCantidadVendida");
-                fila[5] = rs.getDouble("TotalRecaudado");
+                fila[1] = rs.getString("Producto");
+                fila[2] = rs.getDouble("Precio");
+                fila[3] = rs.getInt("CantidadVendida");
+                fila[4] = rs.getDouble("TotalRecaudado");
                 modelo.addRow(fila);
             }
             if (!empleadoEncontrado) {

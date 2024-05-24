@@ -44,6 +44,7 @@ public class Ventas extends javax.swing.JFrame {
     int idprofile;
     String usua;
     double TotalPagar = 0.00;
+    
 
     public Ventas(int idEmpleado, String usuario, int iD) {
          this.setUndecorated(true);
@@ -55,6 +56,7 @@ public class Ventas extends javax.swing.JFrame {
         listaproducto = new ArrayList();
         llenarComboProductos();
         btnVender.setVisible(false);
+        txtcedula.requestFocus();
     }
 
     private Ventas() {

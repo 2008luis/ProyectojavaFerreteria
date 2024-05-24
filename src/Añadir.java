@@ -1,4 +1,3 @@
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -25,6 +24,7 @@ public class Añadir extends javax.swing.JFrame {
         this.usar = usuarios;
         this.ides = id;
         Conexiones con = new Conexiones();
+           txtnombreProducto.requestFocus();
         mostrarDatos();
 
     }
@@ -57,6 +57,7 @@ public class Añadir extends javax.swing.JFrame {
         btnBuscar = new javax.swing.JButton();
         lbImagen = new javax.swing.JLabel();
         btnDevolver = new javax.swing.JButton();
+        btnActivar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -169,7 +170,7 @@ public class Añadir extends javax.swing.JFrame {
                 btnmodificarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnmodificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 190, 60));
+        jPanel1.add(btnmodificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 300, 190, 60));
 
         btnDesactivar.setBackground(new java.awt.Color(102, 204, 255));
         btnDesactivar.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
@@ -183,7 +184,7 @@ public class Añadir extends javax.swing.JFrame {
                 btnDesactivarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnDesactivar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 430, 190, 60));
+        jPanel1.add(btnDesactivar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 390, 190, 60));
 
         btnBuscar.setBackground(new java.awt.Color(102, 204, 255));
         btnBuscar.setFont(new java.awt.Font("Segoe UI Black", 1, 12)); // NOI18N
@@ -195,7 +196,7 @@ public class Añadir extends javax.swing.JFrame {
                 btnBuscarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 520, 190, 50));
+        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 490, 190, 50));
 
         lbImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/logoFerreteria.jpeg"))); // NOI18N
         jPanel1.add(lbImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 150, 150));
@@ -209,7 +210,18 @@ public class Añadir extends javax.swing.JFrame {
                 btnDevolverActionPerformed(evt);
             }
         });
-        jPanel1.add(btnDevolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, 190, 50));
+        jPanel1.add(btnDevolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 190, 50));
+
+        btnActivar.setBackground(new java.awt.Color(102, 204, 255));
+        btnActivar.setForeground(new java.awt.Color(0, 0, 0));
+        btnActivar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Activar.png"))); // NOI18N
+        btnActivar.setText("ACTIVAR");
+        btnActivar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActivarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnActivar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 570, 190, 50));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -249,6 +261,7 @@ public class Añadir extends javax.swing.JFrame {
         txtcodigoProducto.setText("");
         txtnombreProducto.setText("");
         txtprecioProducto.setText("");
+     
     }//GEN-LAST:event_btnAgregarProductoActionPerformed
 
 
@@ -276,30 +289,33 @@ public class Añadir extends javax.swing.JFrame {
         try (Connection connection = DriverManager.getConnection(con.getUrl(), con.getUser(), con.getPass())) {
 
             PreparedStatement selectStmt = connection.prepareCall("call obteneridProducto(?)");
-            selectStmt.setString(1, nombre);
+            selectStmt.setString(1, txtnombreProducto.getText());
             ResultSet rs = selectStmt.executeQuery();
             if (rs.next()) {
-                idProducto = rs.getInt("id_producto");
+                int idProducto = rs.getInt("id_producto");
 
-                String nuevoNombre = txtnombreProducto.getText();
                 int nuevaCantidad = Integer.parseInt(txtcantidadProducto.getText());
                 double nuevoPrecio = Double.parseDouble(txtprecioProducto.getText());
                 double precioVenta = nuevoPrecio * 2;
 
-                String sql = "UPDATE producto SET  cantidad = ?, precio = ?, precioVenta = ? WHERE id_producto = ?";
-                PreparedStatement updateStmt = connection.prepareStatement(sql);
-                updateStmt.setInt(1, nuevaCantidad);
-                updateStmt.setDouble(2, nuevoPrecio);
-                updateStmt.setDouble(3, precioVenta);
-                updateStmt.setInt(4, idProducto);
+                String sql = "{call actualizarProducto(?, ?, ?, ?)}";
+                try (PreparedStatement stmt = connection.prepareCall(sql)) {
+                    stmt.setInt(1, idProducto);
+                    stmt.setInt(2, nuevaCantidad);
+                    stmt.setDouble(3, nuevoPrecio);
+                    stmt.setDouble(4, precioVenta);
 
-                int filasActualizadas = updateStmt.executeUpdate();
+                    int filasActualizadas = stmt.executeUpdate();
 
-                if (filasActualizadas > 0) {
-                    JOptionPane.showMessageDialog(rootPane, "Producto actualizado exitosamente");
-                    mostrarDatos();
-                } else {
-                    JOptionPane.showMessageDialog(rootPane, "No se pudo actualizar el producto");
+                    if (filasActualizadas > 0) {
+                        JOptionPane.showMessageDialog(rootPane,
+                                "Producto actualizado exitosamente.\n"
+                                + "La cantidad actualizada es: " + nuevaCantidad + "\n"
+                                + "El precio actualizado es: " + nuevoPrecio);
+                        mostrarDatos();
+                    } else {
+                        JOptionPane.showMessageDialog(rootPane, "No se pudo actualizar el producto");
+                    }
                 }
             } else {
                 JOptionPane.showMessageDialog(rootPane, "Producto no encontrado");
@@ -343,22 +359,24 @@ public class Añadir extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDesactivarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-            Conexiones con = new Conexiones();
-        try (Connection conexion = DriverManager.getConnection(con.url, con.user, con.pass)) {
-           
+  if(txtcodigoProducto.getText().isEmpty()){
+        JOptionPane.showMessageDialog(rootPane, "ingresa el codigo a buscar", "elije un producto", JOptionPane.ERROR_MESSAGE);
+        txtcodigoProducto.requestFocus();
+        return;
+    }
+        Conexiones con = new Conexiones();
+        try (Connection conexion = DriverManager.getConnection(con.getUrl(), con.getUser(), con.getPass())) {
             String procedimientoBuscar = "{call buscar(?)}";
-
             try (PreparedStatement stmtBuscar = conexion.prepareCall(procedimientoBuscar)) {
-              
-                stmtBuscar.setInt(1, codigo);
+                stmtBuscar.setString(1, txtcodigoProducto.getText());
 
-            
                 try (ResultSet rs = stmtBuscar.executeQuery()) {
                     DefaultTableModel modeloTabla = new DefaultTableModel();
                     modeloTabla.addColumn("Nombre Producto");
                     modeloTabla.addColumn("Precio");
                     modeloTabla.addColumn("Precio Venta");
                     modeloTabla.addColumn("Cantidad");
+
                     while (rs.next()) {
                         Object[] fila = new Object[4];
                         fila[0] = rs.getString("nombreProducto");
@@ -371,10 +389,17 @@ public class Añadir extends javax.swing.JFrame {
                 }
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             System.out.println("Error al buscar el producto: " + e.getMessage());
-        }
+}
         
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnActivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActivarActionPerformed
+     Activarproducto acti = new Activarproducto(usar , emplea, ides);
+     acti.setVisible(true);
+     dispose();
+    }//GEN-LAST:event_btnActivarActionPerformed
     public void guardarProductos() {
         codigo = Integer.parseInt(txtcodigoProducto.getText());
         cantidad = Integer.parseInt(txtcantidadProducto.getText());
@@ -487,6 +512,7 @@ public class Añadir extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnActivar;
     private javax.swing.JButton btnAgregarProducto;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnDesactivar;

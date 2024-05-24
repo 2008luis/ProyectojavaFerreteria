@@ -5,24 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
-
-/**
- *
- * @author janus
- */
 public class RegistroCliente extends javax.swing.JFrame {
 
-    /**
-     * Creates new form RegistroCliente
-     */
+
     String apellido, nombre,telefono,cedula;
     public RegistroCliente() {
         initComponents();
           this.setLocationRelativeTo(null);
+          txtNombre.requestFocus();
     }
 
     /**

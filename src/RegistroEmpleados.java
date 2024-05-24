@@ -13,6 +13,7 @@ public class RegistroEmpleados extends javax.swing.JFrame {
         initComponents();
         mostrarEmpleados();
         this.setLocationRelativeTo(null);
+        txtnombre.requestFocus();
     }
 
     @SuppressWarnings("unchecked")

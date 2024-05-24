@@ -3,17 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/C:/Users/janus/Documents/ProyectojavaFerreteria/src/Añadir.java</file>
-=======
-            <file>file:/C:/Users/garan/OneDrive/Documentos/Proyecto%20ferre/ProyectojavaFerreteria/src/proyecto_fereteria/Proyecto_fereteria.java</file>
-            <file>file:/C:/Users/garan/OneDrive/Documentos/Proyecto%20ferre/ProyectojavaFerreteria/src/Ventas.java</file>
-            <file>file:/C:/Users/garan/OneDrive/Documentos/Proyecto%20ferre/ProyectojavaFerreteria/src/Conexiones.java</file>
-            <file>file:/C:/Users/garan/OneDrive/Documentos/Proyecto%20ferre/ProyectojavaFerreteria/src/ReportesVentanas/Conexion.java</file>
-            <file>file:/C:/Users/garan/OneDrive/Documentos/Proyecto%20ferre/ProyectojavaFerreteria/src/Inventario.java</file>
-            <file>file:/C:/Users/garan/OneDrive/Documentos/Proyecto%20ferre/ProyectojavaFerreteria/src/LOGIN.java</file>
-            <file>file:/C:/Users/garan/OneDrive/Documentos/Proyecto%20ferre/ProyectojavaFerreteria/src/RegistroEmpleados.java</file>
->>>>>>> 000747980342242e339e4357dd29ed9b36308575
+            <file>file:/C:/Users/janus/Documents/ProyectojavaFerreteria/src/ReportesVentanas/JIFVendedorFechas.java</file>
+            <file>file:/C:/Users/janus/Documents/ProyectojavaFerreteria/src/Activarproducto.java</file>
+            <file>file:/C:/Users/janus/Documents/ProyectojavaFerreteria/src/ReportesVentanas/JIFVendedorMasVentas.java</file>
+            <file>file:/C:/Users/janus/Documents/ProyectojavaFerreteria/src/Ventas.java</file>
+            <file>file:/C:/Users/janus/Documents/ProyectojavaFerreteria/src/ReportesVentanas/JIFProductoMasVendido.java</file>
+            <file>file:/C:/Users/janus/Documents/ProyectojavaFerreteria/src/ReportesVentanas/JIFRecuadoVendedor.java</file>
+            <file>file:/C:/Users/janus/Documents/ProyectojavaFerreteria/src/ReportesVentanas/JIFReporteVentasRealizadas.java</file>
+            <file>file:/C:/Users/janus/Documents/ProyectojavaFerreteria/src/ReportesVentanas/JIFClienteMasCompras.java</file>
         </group>
     </open-files>
 </project-private>
