@@ -373,28 +373,26 @@ public class Ventas extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDevolverActionPerformed
 
     public void vender(String producto, int cantidad) {
-        Conexiones con = new Conexiones();
-        nombreClientes = txtnombreClie.getText();
-        nit = txtcedula.getText();
+    Conexiones con = new Conexiones();
+    nombreClientes = txtnombreClie.getText();
+    nit = txtcedula.getText();
 
-        try {
-            Connection connection = DriverManager.getConnection(con.getUrl(), con.getUser(), con.getPass());
-            PreparedStatement stmtCantidad = connection.prepareStatement("CALL obtenerCantidadProducto(?)");
-            stmtCantidad.setString(1, producto);
-            ResultSet rs = stmtCantidad.executeQuery();
-            if (rs.next()) {
-                int cantidadDisponible = rs.getInt("cantidad");
-                if (cantidadDisponible < cantidad) {
-                    JOptionPane.showMessageDialog(rootPane, "No hay suficiente cantidad disponible para realizar la venta del producto: " + producto);
-                    return;
-                }
-            } else {
-                JOptionPane.showMessageDialog(rootPane, "El producto seleccionado no existe.");
+    try {
+        Connection connection = DriverManager.getConnection(con.getUrl(), con.getUser(), con.getPass());
+        PreparedStatement stmtCantidad = connection.prepareStatement("CALL obtenerCantidadProducto(?)");
+        stmtCantidad.setString(1, producto);
+        ResultSet rs = stmtCantidad.executeQuery();
+        if (rs.next()) {
+            int cantidadDisponible = rs.getInt("cantidad");
+            if (cantidadDisponible < cantidad) {
+                JOptionPane.showMessageDialog(rootPane, "No hay suficiente cantidad disponible para realizar la venta del producto: " + producto);
                 return;
             }
+            
+            int cantidadRestante = cantidadDisponible - cantidad;
+            
             Date fecha = Calendar.getInstance().getTime();
             java.sql.Date Fechavender = new java.sql.Date(fecha.getTime());
-
             PreparedStatement stmtVenta = connection.prepareStatement("CALL agregarVenta(?, ?, ?, ?, ?, ?, ?, ?, ?)");
             stmtVenta.setString(1, nombreClientes);
             stmtVenta.setString(2, nit);
@@ -407,11 +405,22 @@ public class Ventas extends javax.swing.JFrame {
             stmtVenta.setInt(9, idCliente);
             stmtVenta.executeUpdate();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(rootPane, "Error de base de datos: " + e.getMessage());
+           if (cantidadRestante == 0) {
+                PreparedStatement stmtActualizarEstado = connection.prepareCall("{CALL actualizarEstadoProducto(?, ?)}");
+                stmtActualizarEstado.setString(1, producto);
+                stmtActualizarEstado.setString(2, "Inactivo");
+                stmtActualizarEstado.execute();
+            }
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "El producto seleccionado no existe.");
+            return;
         }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(rootPane, "Error de base de datos: " + e.getMessage());
     }
+}
 
     public void generarPDF() throws DocumentException, IOException {
         try {
@@ -425,25 +434,25 @@ public class Ventas extends javax.swing.JFrame {
             PdfWriter.getInstance(doc, new FileOutputStream(file));
             doc.open();
 
-            // Agregar logo de la ferretería
+
             String imagePath = "src/Imagenes/logoFerreteria.jpeg";
             Image img = Image.getInstance(imagePath);
             img.scaleToFit(100, 100);
             img.setAlignment(Element.ALIGN_RIGHT);
             doc.add(img);
 
-            // Título de la factura
+           
             Paragraph titulo = new Paragraph("Factura de Venta", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 20, Font.BOLD, BaseColor.BLACK));
             titulo.setAlignment(Element.ALIGN_CENTER);
             doc.add(titulo);
 
-            // Fecha de emisión
+          
             String fechaEmision = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
             Paragraph fecha = new Paragraph("Fecha de Emisión: " + fechaEmision, FontFactory.getFont(FontFactory.HELVETICA, 12));
             fecha.setAlignment(Element.ALIGN_RIGHT);
             doc.add(fecha);
 
-            // Información del Emisor
+        
             Paragraph emisor = new Paragraph();
             emisor.add(new Phrase("Emisor: PINTUACCESORIOS LA PERLA S.A.S.", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
             emisor.add(Chunk.NEWLINE);
@@ -457,25 +466,25 @@ public class Ventas extends javax.swing.JFrame {
             emisor.setSpacingBefore(20);
             doc.add(emisor);
 
-            // Información del cliente
+    
             Paragraph datosCliente = new Paragraph();
             datosCliente.add(new Phrase("Receptor: " + nombreClientes, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
             datosCliente.add(Chunk.NEWLINE);
             datosCliente.add(new Phrase("Apellido: " + Apellido));
             datosCliente.add(Chunk.NEWLINE);
             datosCliente.add(new Phrase("Cédula : " + nit));
-            datosCliente.add(Chunk.NEWLINE);  // Agregar un salto de línea después de la cédula
+            datosCliente.add(Chunk.NEWLINE);  
             datosCliente.setFont(FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, BaseColor.BLACK));
             datosCliente.setSpacingBefore(20);
             datosCliente.add(Chunk.NEWLINE); 
             doc.add(datosCliente);
 
-            // Tabla de productos
+   
             PdfPTable pdfTable = new PdfPTable(tblProductos.getColumnCount());
             pdfTable.setWidthPercentage(100); // Ajusta el ancho de la tabla al 100% de la página
             pdfTable.setHorizontalAlignment(Element.ALIGN_LEFT); // Alinea la tabla a la izquierda
 
-            // Añadir cabeceras
+           
             for (int i = 0; i < tblProductos.getColumnCount(); i++) {
                 PdfPCell header = new PdfPCell(new Phrase(tblProductos.getColumnName(i), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.WHITE)));
                 header.setBackgroundColor(BaseColor.DARK_GRAY);
@@ -483,7 +492,7 @@ public class Ventas extends javax.swing.JFrame {
                 pdfTable.addCell(header);
             }
 
-            // Añadir contenido de las filas
+     
             for (int row = 0; row < tblProductos.getRowCount(); row++) {
                 for (int col = 0; col < tblProductos.getColumnCount(); col++) {
                     Object value = tblProductos.getValueAt(row, col);
@@ -493,22 +502,18 @@ public class Ventas extends javax.swing.JFrame {
                 }
             }
             pdfTable.setSpacingBefore(20);
-            doc.add(pdfTable); // Añadir la tabla al documento después de llenarla con datos
+            doc.add(pdfTable); 
 
-            // Valor total a pagar
-            totalPagar(); // Calcular el total a pagar
+           
+            totalPagar(); 
             Paragraph total = new Paragraph("Total a Pagar: $" + LabelTotal.getText(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14, Font.BOLD, BaseColor.BLACK));
             total.setAlignment(Element.ALIGN_RIGHT);
             total.setSpacingBefore(20);
             doc.add(total);
-
-            // Mensaje de agradecimiento
             Paragraph agradecimiento = new Paragraph("Gracias por ser parte de nuestra familia.", FontFactory.getFont(FontFactory.HELVETICA, 12, Font.ITALIC, BaseColor.GRAY));
             agradecimiento.setAlignment(Element.ALIGN_CENTER);
             agradecimiento.setSpacingBefore(20);
             doc.add(agradecimiento);
-
-            // Cerrar documento
             doc.close();
 
             if (file.exists()) {
